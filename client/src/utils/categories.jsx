@@ -5,11 +5,12 @@ function Categories({ source, title }) {
                 <img
                     src={source}
                     alt={title}
+                    loading="lazy"
                     className="w-full h-full object-cover rounded-lg"
                 />
             </figure>
             <div className="card-body p-2 items-center">
-                <h1 className="card-title">{title}</h1>
+                <h1 className="card-title font-geist font-light">{title}</h1>
             </div>
         </div>
     )
