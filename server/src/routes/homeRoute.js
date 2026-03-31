@@ -1,9 +1,11 @@
 import express from "express";
 
-import {category} from "../controllers/food.controller.js";
+import {getFood, addFood, updateFood} from "../controllers/food.controller.js";
 
 const route = express.Router();
 
-route.get("/category" , category);
+route.get("/food" , getFood);
+route.post("/food", addFood);
+route.patch("/food/:id", updateFood);
 
 export default route;
