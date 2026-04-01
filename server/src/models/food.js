@@ -1,4 +1,4 @@
-import mongoose, { Mongoose } from 'mongoose';
+import mongoose from 'mongoose';
 
 const foodSchema = new mongoose.Schema({
     name: {
@@ -24,7 +24,11 @@ const foodSchema = new mongoose.Schema({
     foodImage: {
         type: String,
         required: true,
+    },
+    imageId : {
+        type: String,
+        required : true,
     }
 },{timestamps: true})
 
-export default mongoose.model("Foods",foodSchema);
+export default mongoose.model("Foods", foodSchema);
