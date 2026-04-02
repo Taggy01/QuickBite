@@ -36,7 +36,7 @@ function Navbar() {
                     </div>
                 ) : (
                     <>
-                        <a><button className="text-xl text-base-content/80 cursor-pointer" onClick={() => {setView("login"); document.getElementById('my_modal_2').showModal();}}>Login</button></a>
+                        <a><button className="text-xl text-base-content/80 cursor-pointer" onClick={() => document.getElementById('my_modal_2').showModal()}>Login</button></a>
                         <dialog id="my_modal_2" className="modal">
                             {view === "login" && <Login switchToSignup={() => setView("signup")} />}
                             {view === "signup" && <Signup switchToLogin={() => setView("login")} />}
