@@ -3,6 +3,7 @@ import Login from "../components/login";
 import TypeAnimation from "../utils/typeanimate";
 import { useState } from "react";
 import Signup from "./signup";
+import CartItems from "./cart";
 
 function Navbar() {
     const [view, setView] = useState("login");
@@ -31,12 +32,12 @@ function Navbar() {
                             <li className="text-md font-medium text-base-content/40">randomEmail@gmail.com</li>
                             <li className="divider h-px bg-accent-content/50"></li>
                             <li><a>My Orders</a></li>
-                            <li><a>Log Out</a></li>
+                            <li className="hover:bg-error rounded-sm hover:text-white"><a>Log Out</a></li>
                         </ul>
                     </div>
                 ) : (
                     <>
-                        <a><button className="text-xl text-base-content/80 cursor-pointer" onClick={() => {setView("login"); document.getElementById('my_modal_2').showModal();}}>Login</button></a>
+                        <a><button className="text-xl text-base-content/80 cursor-pointer" onClick={() => { setView("login"); document.getElementById('my_modal_2').showModal(); }}>Login</button></a>
                         <dialog id="my_modal_2" className="modal">
                             {view === "login" && <Login switchToSignup={() => setView("signup")} />}
                             {view === "signup" && <Signup switchToLogin={() => setView("login")} />}
@@ -46,12 +47,25 @@ function Navbar() {
                         </dialog>
                     </>
                 )}
-                <div className=" btn btn-soft btn-accent w-30 h-13 items-center gap-2">
-                    <ShoppingCart className="join-item w-5 h-5" />
-                    <button className="text-lg join-item">Cart</button>
+                <div className="drawer drawer-end w-30 h-13 flex items-center gap-2 cursor-pointer">
+                    <input id="cart-drawer" type="checkbox" className="drawer-toggle" />
+
+                    {/* Button (trigger) */}
+                    <div className="drawer-content">
+                        <label
+                            htmlFor="cart-drawer"
+                            className="btn btn-soft btn-accent w-30 h-13 flex items-center gap-2"
+                        >
+                            <ShoppingCart className="w-5 h-5" />
+                            <span className="text-lg">Cart</span>
+                        </label>
+                    </div>
+
+                    {/* Sidebar */}
+                    <CartItems />
                 </div>
             </div>
-        </nav   >
+        </nav>
     )
 }
 

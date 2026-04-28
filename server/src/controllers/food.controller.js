@@ -1,4 +1,5 @@
 import Foods from "../models/food.js";
+import Category from "../models/category.js";
 import cloudinary from "../utils/cloudinary.js";
 
 export const getFood = async (req, res) => {
@@ -22,7 +23,7 @@ export const getFood = async (req, res) => {
 
 export const addFood = async (req, res) => {
   try {
-    const { name, quantity, price, category, foodTime } = req.body;
+    const { name, quantity, price, categorySlug, foodTime } = req.body;
 
     if (!req.file) {
       return res.status(400).json({
@@ -30,11 +31,15 @@ export const addFood = async (req, res) => {
       });
     }
 
-    const imageId = req.file.filename;
-    const foodImage = req.file.path;
-
-    if (!name || !foodTime || !price || !category || !quantity) {
+    if (!name || !foodTime || !price || !quantity) {
       return res.status(400).json({ message: "Required all fields" });
+    }
+
+    const category = await Category.findOne({slug: categorySlug});
+    if (!category) {
+      return res.status(404).json({
+        message: "No category Found",
+      });
     }
 
     if (quantity < 0 || price < 0) {
@@ -43,14 +48,28 @@ export const addFood = async (req, res) => {
       });
     }
 
+    const uploadImage = () =>
+      new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: "foods" },
+          (error, result) => {
+            if (result) resolve(result);
+            else reject(error);
+          },
+        );
+        stream.end(req.file.buffer);
+      });
+
+    const result = await uploadImage();
+
     const newFood = new Foods({
       name,
       quantity,
       price,
       category,
       foodTime,
-      foodImage,
-      imageId,
+      foodImage: result.secure_url,
+      imageId: result.public_id,
     });
 
     const savedFood = await newFood.save();
@@ -72,7 +91,7 @@ export const updateFood = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const allowedFields = ["name", "price", "quantity", "category", "foodTime"];
+    const allowedFields = ["name", "price", "quantity", "foodTime"];
 
     const updates = {};
 
@@ -83,8 +102,38 @@ export const updateFood = async (req, res) => {
     });
 
     if (req.file) {
-      updates.foodImage = req.file.path;
-      updates.imageId = req.file.filename;
+      const uploadImage = () =>
+        new Promise((resolve, reject) => {
+          const stream = cloudinary.uploader.upload_stream(
+            { folder: "foods" },
+            (error, result) => {
+              if (result) resolve(result);
+              else reject(error);
+            },
+          );
+          stream.end(req.file.buffer);
+        });
+
+      const result = await uploadImage();
+
+      const existingFood = await Foods.findById(id);
+      if (existingFood?.imageId) {
+        await cloudinary.uploader.destroy(existingFood.imageId);
+      }
+
+      updates.foodImage = result.secure_url;
+      updates.imageId = result.public_id;
+    }
+
+    if (req.body.categoryId) {
+      const category = await Category.findById(categoryId);
+      if (!category) {
+        return res.status(404).json({
+          message: "No category Found",
+        });
+      }
+
+      updates.category = req.body.categoryId;
     }
 
     if (Object.keys(updates).length === 0) {
@@ -138,7 +187,7 @@ export const deleteFood = async (req, res) => {
       return res.status(404).json({ message: "Food not found" });
     }
 
-    if(food.imageId){
+    if (food.imageId) {
       await cloudinary.uploader.destroy(food.imageId);
     }
 
