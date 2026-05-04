@@ -10,7 +10,7 @@ function Navbar() {
     return (
         <nav className="navbar bg-base-100 shadow-sm px-10 h-20 fixed top-0 z-10">
             <div className="navbar-start">
-                <a className="text-3xl font-geist"><span className="text-emerald-400">Quick</span><span className="text-emerald-500">Bite</span></a>
+                <a href="/" className="text-3xl font-geist"><span className="text-emerald-400">Quick</span><span className="text-emerald-500">Bite</span></a>
             </div>
             <div className="navbar-center">
                 <a className="flex cursor-text border border-neutral-content rounded-lg bg-neutral-content/40 h-13 w-100 px-4" href="/search">
@@ -21,7 +21,7 @@ function Navbar() {
                 </a>
             </div>
             <div className="navbar-end gap-10">
-                {false ? (
+                {true ? (
                     <div className="dropdown">
                         <div role="button" tabIndex={0} className="flex justify-center items-center gap-2 cursor-pointer">
                             <p className="text-xl text-base-content/80 join-item">Account</p>
@@ -31,7 +31,7 @@ function Navbar() {
                             <li className="text-lg font-bold text-base-content/60">My Account</li>
                             <li className="text-md font-medium text-base-content/40">randomEmail@gmail.com</li>
                             <li className="divider h-px bg-accent-content/50"></li>
-                            <li><a>My Orders</a></li>
+                            <li><a  href="/orders">My Orders</a></li>
                             <li className="hover:bg-error rounded-sm hover:text-white"><a>Log Out</a></li>
                         </ul>
                     </div>

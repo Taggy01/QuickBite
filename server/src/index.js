@@ -5,7 +5,7 @@ import "dotenv/config";
 
 import foodRouter from "./routes/foodRoute.js";
 import categoryRouter from "./routes/categoryRoute.js";
-// import authRouter from "./routes/authRoute.js";
+import authRouter from "./routes/authRoute.js";
 import { connectDB } from "./utils/mongoose.js";
 
 const app = express();
@@ -20,7 +20,7 @@ app.use(cookieParser());
 
 app.use("/api/food" , foodRouter);
 app.use("/api/category" , categoryRouter);
-// app.use("/api/auth", authRouter);
+app.use("/api/auth", authRouter);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT,()=>{
