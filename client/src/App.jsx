@@ -3,10 +3,13 @@ import Homepage from './pages/Homepage'
 import Adminpanel from './pages/Adminpage'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import MyOrderPage from './pages/MyOrderpage'
+import { Toaster } from 'react-hot-toast'
 
 function App() {
   return (
     <BrowserRouter>
+      <Toaster position='top-right' />
+      
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/orders" element={<MyOrderPage />} />

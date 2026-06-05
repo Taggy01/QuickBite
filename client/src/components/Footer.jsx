@@ -26,7 +26,7 @@ function Footer() {
                 </nav>
             </footer>
             <aside className="py-5 text-center">
-                <p>Copyright © {new Date().getFullYear()} - All right reserved by QuickBite</p>
+                <p>Copyright © {new Date().getFullYear()} - All right reserved by MealMate</p>
             </aside>
         </div>
     )

@@ -7,7 +7,7 @@ function Hero() {
                     <h1 className="font-instrument text-7xl">
                         Get A Quick Meal Just At Your Fingertips
                     </h1>
-                    <p className="font-geist text-2xl pt-3">Just at QuickBite</p>
+                    <p className="font-geist text-2xl pt-3">Just at MealMate</p>
                 </div>
             </div>
         </div>

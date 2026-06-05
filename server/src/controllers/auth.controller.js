@@ -21,7 +21,7 @@ export const signup = async (req, res) => {
       });
     }
 
-    if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return res.status(400).json({
         message: "Invalid Email",
       });
