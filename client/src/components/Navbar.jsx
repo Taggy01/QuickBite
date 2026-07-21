@@ -3,7 +3,7 @@ import Login from "../components/login";
 import TypeAnimation from "../utils/typeanimate";
 import { useEffect, useState } from "react";
 import Signup from "./signup";
-import CartItems from "./cart";
+import CartItems from "./Cart";
 import api from "../utils/axios";
 import { useNavigate } from "react-router-dom";
 
@@ -107,7 +107,7 @@ function Navbar() {
                     <div className="drawer-content">
                         <label
                             htmlFor="cart-drawer"
-                            className="btn btn-soft btn-accent w-30 h-13 flex items-center gap-2"
+                            className="btn btn-success w-30 h-13 flex items-center gap-2"
                         >
                             <ShoppingCart className="w-5 h-5" />
                             <span className="text-lg">Cart</span>

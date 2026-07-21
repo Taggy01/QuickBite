@@ -5,7 +5,7 @@ function CardList({ items = [], head, loading }) {
     return (
         <div className="mt-20">
             <h1 className="font-instrument mb-5 text-4xl font-medium">{head}</h1>
-                <div className="carousel grid grid-cols-6 space-x-4">
+                <div className="carousel flex flex-wrap space-x-4">
                     {loading 
                         ? Array(6).fill(0).map((_, i) => (
                                 <div key={i} className="carousel-item">

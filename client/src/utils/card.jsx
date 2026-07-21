@@ -18,7 +18,7 @@ function Card({ foodImage, name, quantity, price }) {
             </figure>
             <div className="card-body p-4">
                 <h1 className="card-title">{name}</h1>
-                <p className="text-accent-content/50 font-geist">Quantity : {quantity}</p>
+                <p className="text-secondary-content/50 font-geist">Quantity : {quantity}</p>
                 <div className="card-actions items-center pt-4">
                     <p className="font-geist font-medium">₹ {price}</p>
                     <button className="btn btn-soft btn-primary">Add</button>
