@@ -5,30 +5,42 @@ import { useEffect, useState } from "react";
 import Signup from "./signup";
 import CartItems from "./cart";
 import api from "../utils/axios";
+import { useNavigate } from "react-router-dom";
 
 function Navbar() {
     const [view, setView] = useState("login");
     const [user, setUser] = useState(undefined);
-
-    const fetchUser = async () => {
-        try {
-            const response = await api.get("/auth/me");
-            setUser(response.data);
-            console.log("Fetched user:", response.data);
-        } catch (error) {
-            console.log("Error in Fetching User : ", error);
-            setUser(null);
-        }
-    }
+    const navigate = useNavigate();
 
     useEffect(() => {
-        fetchUser();
+        let mounted = true;
+
+        const loadUser = async () => {
+            try {
+                const response = await api.get("/auth/me");
+                if (mounted) {
+                    setUser(response.data);
+                }
+            } catch (error) {
+                console.log("Error in Fetching User : ", error);
+                if (mounted) {
+                    setUser(null);
+                }
+            }
+        };
+
+        void loadUser();
+
+        return () => {
+            mounted = false;
+        };
     }, []);
 
     const handleLogout = async () => {
         try {
             await api.post("/auth/logout");
             setUser(null);
+            navigate("/");
         } catch (error) {
             console.log("Logout error:", error);
         }
@@ -45,7 +57,7 @@ function Navbar() {
     return (
         <nav className="navbar bg-base-100 shadow-sm px-10 h-20 fixed top-0 z-10">
             <div className="navbar-start">
-                <a href="/" className="text-3xl font-geist"><span className="text-lime-600 font-semibold">Meal</span><span className="text-mauve-700 font-semibold">Mate</span></a>
+                <a href="/" className="text-3xl font-geist"><span className="text-lime-600 font-semibold">Pick-it</span><span className="text-amber-400 font-semibold">Up</span></a>
             </div>
             <div className="navbar-center">
                 <div className="flex cursor-text border border-neutral-content rounded-lg bg-neutral-content/40 h-13 w-100 px-4" onClick={() => navigate("/search")}>
@@ -63,7 +75,11 @@ function Navbar() {
                             <ChevronDown className="join-item w-4 h-4" />
                         </div>
                         <ul tabIndex={-1} className="dropdown-content menu bg-base-200 rounded-lg z-1 p-5 shadow-md font-geist">
-                            <li className="text-lg font-bold text-base-content/60">My Account</li>
+                            <li className="text-lg font-bold text-base-content/60">
+                                {user?.username
+                                    ? user.username.charAt(0).toUpperCase() + user.username.slice(1)
+                                    : ""}
+                            </li>
                             <li className="text-md font-medium text-base-content/40">{user?.email}</li>
                             <li className="divider h-px bg-accent-content/50"></li>
                             <li><a href="/orders">My Orders</a></li>
