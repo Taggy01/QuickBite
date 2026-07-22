@@ -9,7 +9,32 @@ import api from "../utils/axios.js";
 function Homepage() {
     const [items, setItems] = useState([]);
     const [types, setTypes] = useState([]);
+    const [user, setUser] = useState(undefined);
     const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        let mounted = true;
+
+        const loadUser = async () => {
+            try {
+                const response = await api.get("/auth/me");
+                if (mounted) {
+                    setUser(response.data);
+                }
+            } catch (error) {
+                console.log("Error in Fetching User : ", error);
+                if (mounted) {
+                    setUser(null);
+                }
+            }
+        };
+
+        void loadUser();
+
+        return () => {
+            mounted = false;
+        };
+    }, []);
 
     const getByTiming = (name) => {
         return items.filter(item => item.foodTime === name);
@@ -34,14 +59,14 @@ function Homepage() {
     }, []);
     return (
         <>
-            <Navbar />
+            <Navbar user={user} setUser={setUser} />
             <div className="mx-30 mt-25">
                 <Hero />
                 <Types loading={loading} categories={types} />
-                <CardList items={getByTiming("Breakfast")} loading={loading} head={"BreakFast"} />
-                <CardList items={getByTiming("Lunch")} loading={loading} head={"Lunch"} />
-                <CardList items={getByTiming("Snacks")} loading={loading} head={"Snacks"} />
-                <CardList items={getByTiming("Dinner")} loading={loading} head={"Dinner"} />
+                <CardList items={getByTiming("Breakfast")} loading={loading} head={"BreakFast"} user={user} />
+                <CardList items={getByTiming("Lunch")} loading={loading} head={"Lunch"} user={user} />
+                <CardList items={getByTiming("Snacks")} loading={loading} head={"Snacks"} user={user} />
+                <CardList items={getByTiming("Dinner")} loading={loading} head={"Dinner"} user={user} />
             </div>
             <Footer />
         </>

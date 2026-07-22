@@ -5,7 +5,7 @@ function Types({categories = [], loading }) {
         <div className="mt-20 p-4 gap-4 flex justify-center flex-wrap">
             {loading
                 ? Array(7).fill(0).map((_, i) => (
-                    <div key={i} className="skeleton h-30 w-3/4"></div>
+                    <div key={i} className="skeleton h-30 w-30 aspect-3/4"></div>
                 ))
 
                 : categories.map((category) => (

@@ -8,35 +8,10 @@ import api from "../utils/axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
-function Navbar() {
+function Navbar({ user, setUser }) {
     const [view, setView] = useState("login");
-    const [user, setUser] = useState(undefined);
-    const [cart, setCart] = useState([]);
+    const [basket, setBasket] = useState([]);
     const navigate = useNavigate();
-
-    useEffect(() => {
-        let mounted = true;
-
-        const loadUser = async () => {
-            try {
-                const response = await api.get("/auth/me");
-                if (mounted) {
-                    setUser(response.data);
-                }
-            } catch (error) {
-                console.log("Error in Fetching User : ", error);
-                if (mounted) {
-                    setUser(null);
-                }
-            }
-        };
-
-        void loadUser();
-
-        return () => {
-            mounted = false;
-        };
-    }, []);
 
     const handleLogout = async () => {
         try {
@@ -50,18 +25,25 @@ function Navbar() {
     };
 
     useEffect(() => {
-        if (user) {
-            const fetchCart = async () => {
+        if (basket && user) {
+            const fetchBasket = async () => {
                 try {
-                    const response = await api.get("/cart");
-                    setCart(response.data);
+                    const response = await api.get("/basket");
+                    if (response.data && Array.isArray(response.data.items)) {
+                        setBasket(response.data.items);
+                    } else {
+                        setBasket([]);
+                    }
                 } catch (error) {
-                    console.log("Error fetching cart:", error);
+                    console.log("Error fetching basket:");
+                    console.log(error);
+                    console.log("Status:", error.response?.status);
+                    console.log("Message:", error.response?.data);
                 }
             };
-            fetchCart();
+            fetchBasket();
         }
-    }, [user]);
+    }, [basket, user]);
 
     if (user === undefined) {
         return (
@@ -123,8 +105,8 @@ function Navbar() {
                     {/* Button (trigger) */}
                     <div className="drawer-content">
                         <label
-                            htmlFor={`${cart.length === 0 ? '' : `cart-drawer`}`}
-                            className={`btn ${cart.length === 0 ? 'btn-base-100 text-base-content/30 cursor-not-allowed' : 'btn-primary'} w-30 h-13 flex items-center gap-2`}
+                            htmlFor={`${basket.length === 0 ? '' : `cart-drawer`}`}
+                            className={`btn ${basket.length === 0 ? 'btn-base-100 text-base-content/30 cursor-not-allowed' : 'btn-primary'} w-30 h-13 flex items-center gap-2`}
                         >
                             <ShoppingBasket className="w-5 h-5" />
                             <span className="text-lg">Basket</span>

@@ -1,6 +1,18 @@
 import React from "react";
+import api from "../utils/axios";
 
-function Card({ foodImage, name, quantity, price }) {
+function Card({ foodImage, name, quantity, price, _id, user }) {
+
+    const addToBasket = async () => {
+        try {
+            if(user){
+                const response = await api.post("/basket", { productId: _id, quantity: 1 });
+                console.log("Item added to basket:", response.data);
+            }
+        } catch (error) {
+            console.log("Error in Card Component : ", error);
+        }
+    };
 
     const optimizeImage = (url) => {
         return url.replace("/upload/", "/upload/w_200,h_200,c_fill/");
@@ -21,7 +33,11 @@ function Card({ foodImage, name, quantity, price }) {
                 <p className="text-secondary-content/50 font-geist">Quantity : {quantity}</p>
                 <div className="card-actions items-center pt-4">
                     <p className="font-geist font-medium">₹ {price}</p>
-                    <button className="btn btn-soft btn-primary">Add</button>
+                    <button className="btn btn-soft btn-primary" onClick={() => {
+                        addToBasket();
+                    }}>
+                        Add
+                    </button>
                 </div>
             </div>
         </div>
