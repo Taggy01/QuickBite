@@ -1,15 +1,17 @@
-import { Search, ShoppingCart, ChevronDown } from "lucide-react";
+import { Search, ShoppingBasket, ChevronDown } from "lucide-react";
 import Login from "../components/login";
 import TypeAnimation from "../utils/typeanimate";
 import { useEffect, useState } from "react";
 import Signup from "./signup";
-import CartItems from "./Cart";
+import BasketItems from "./Basket";
 import api from "../utils/axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 function Navbar() {
     const [view, setView] = useState("login");
     const [user, setUser] = useState(undefined);
+    const [cart, setCart] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -40,11 +42,26 @@ function Navbar() {
         try {
             await api.post("/auth/logout");
             setUser(null);
+            toast.success("Logged out successfully");
             navigate("/");
         } catch (error) {
             console.log("Logout error:", error);
         }
     };
+
+    useEffect(() => {
+        if (user) {
+            const fetchCart = async () => {
+                try {
+                    const response = await api.get("/cart");
+                    setCart(response.data);
+                } catch (error) {
+                    console.log("Error fetching cart:", error);
+                }
+            };
+            fetchCart();
+        }
+    }, [user]);
 
     if (user === undefined) {
         return (
@@ -106,16 +123,16 @@ function Navbar() {
                     {/* Button (trigger) */}
                     <div className="drawer-content">
                         <label
-                            htmlFor="cart-drawer"
-                            className="btn btn-success w-30 h-13 flex items-center gap-2"
+                            htmlFor={`${cart.length === 0 ? '' : `cart-drawer`}`}
+                            className={`btn ${cart.length === 0 ? 'btn-base-100 text-base-content/30 cursor-not-allowed' : 'btn-primary'} w-30 h-13 flex items-center gap-2`}
                         >
-                            <ShoppingCart className="w-5 h-5" />
-                            <span className="text-lg">Cart</span>
+                            <ShoppingBasket className="w-5 h-5" />
+                            <span className="text-lg">Basket</span>
                         </label>
                     </div>
 
                     {/* Sidebar */}
-                    <CartItems />
+                    <BasketItems user={user} />
                 </div>
             </div>
         </nav>
