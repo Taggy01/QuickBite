@@ -1,25 +1,5 @@
 import mongoose from "mongoose";
 
-const OrderItemSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  quanity:{
-    type:Number,
-    required:true,
-    min:1,
-  },
-  price:{
-    type:Number,
-    required:true,
-  },
-  image:{
-    type:String,
-    required:true,
-  },
-},{_id:false});
-
 const OrderSchema = new mongoose.Schema(
   {
     date: {
@@ -37,11 +17,15 @@ const OrderSchema = new mongoose.Schema(
       enum: ["UPI", "Cash", "Card"],
       required: true,
     },
-    items: [OrderItemSchema],
-    user: {
+    items: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Foods",
+      required: true
+    }],
+    user: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-    },
+    }],
     subtotal: Number,
     GST: Number,
     total: Number,
