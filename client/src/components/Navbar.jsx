@@ -56,17 +56,17 @@ function Navbar({ user, setUser }) {
     return (
         <nav className="navbar bg-base-100 shadow-sm px-10 h-20 fixed top-0 z-10">
             <div className="navbar-start">
-                <a href="/" className="text-3xl font-geist"><span className="text-lime-600 font-semibold">Pick-it</span><span className="text-amber-400 font-semibold">Up</span></a>
+                <a href="/" className="text-3xl font-geist"><span className="text-lime-600 font-bold">Pick-it</span><span className="text-amber-400 font-bold">Up</span></a>
             </div>
-            <div className="navbar-center">
-                <div className="flex cursor-text border border-neutral-content rounded-lg bg-neutral-content/40 h-13 w-100 px-4" onClick={() => navigate("/search")}>
+            <div className="navbar-center hidden md:flex lg:flex w-1/2 justify-center">
+                <div className="flex cursor-text border border-neutral-content rounded-lg bg-neutral-content/40 h-13 md:w-70 lg:w-100 px-4" onClick={() => navigate("/search")}>
                     <div className="flex justify-center items-center gap-2">
                         <Search className="w-5 h-5 text-base-content/70" />
                         <TypeAnimation />
                     </div>
                 </div>
             </div>
-            <div className="navbar-end gap-10">
+            <div className="navbar-end gap-4">
                 {user ? (
                     <div className="dropdown">
                         <div role="button" tabIndex={0} className="flex justify-center items-center gap-2 cursor-pointer">
@@ -99,7 +99,7 @@ function Navbar({ user, setUser }) {
                         </dialog>
                     </>
                 )}
-                <div className="drawer drawer-end w-30 h-13 flex items-center gap-2 cursor-pointer">
+                <div className="drawer drawer-end flex justify-end">
                     <input id="cart-drawer" type="checkbox" className="drawer-toggle" />
 
                     {/* Button (trigger) */}
@@ -114,7 +114,7 @@ function Navbar({ user, setUser }) {
                     </div>
 
                     {/* Sidebar */}
-                    <BasketItems user={user} />
+                    <BasketItems user={user} basket={basket} />
                 </div>
             </div>
         </nav>
