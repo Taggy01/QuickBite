@@ -1,18 +1,17 @@
 import { Search, ShoppingBasket, ChevronDown } from "lucide-react";
 import Login from "../components/login";
 import TypeAnimation from "../utils/typeanimate";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Signup from "./signup";
 import BasketItems from "./Basket";
 import api from "../utils/axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
-function Navbar({ user, setUser }) {
+function Navbar({ user, setUser, addToBasket, basket, fetchBasket,decreaseFromBasket }) {
     const [view, setView] = useState("login");
-    const [basket, setBasket] = useState([]);
     const navigate = useNavigate();
-
+    
     const handleLogout = async () => {
         try {
             await api.post("/auth/logout");
@@ -23,27 +22,6 @@ function Navbar({ user, setUser }) {
             console.log("Logout error:", error);
         }
     };
-
-    useEffect(() => {
-        if (basket && user) {
-            const fetchBasket = async () => {
-                try {
-                    const response = await api.get("/basket");
-                    if (response.data && Array.isArray(response.data.items)) {
-                        setBasket(response.data.items);
-                    } else {
-                        setBasket([]);
-                    }
-                } catch (error) {
-                    console.log("Error fetching basket:");
-                    console.log(error);
-                    console.log("Status:", error.response?.status);
-                    console.log("Message:", error.response?.data);
-                }
-            };
-            fetchBasket();
-        }
-    }, [basket, user]);
 
     if (user === undefined) {
         return (
@@ -114,7 +92,7 @@ function Navbar({ user, setUser }) {
                     </div>
 
                     {/* Sidebar */}
-                    <BasketItems user={user} basket={basket} />
+                    <BasketItems user={user} basket={basket} addToBasket={addToBasket} fetchBasket={fetchBasket} decreaseFromBasket={decreaseFromBasket} />
                 </div>
             </div>
         </nav>

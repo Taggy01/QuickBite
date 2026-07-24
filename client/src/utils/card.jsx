@@ -1,18 +1,6 @@
 import React from "react";
-import api from "../utils/axios";
 
-function Card({ foodImage, name, quantity, price, _id, user }) {
-
-    const addToBasket = async () => {
-        try {
-            if(user){
-                const response = await api.post("/basket", { productId: _id, quantity: 1 });
-                console.log("Item added to basket:", response.data);
-            }
-        } catch (error) {
-            console.log("Error in Card Component : ", error);
-        }
-    };
+function Card({ foodImage, name, quantity, price, _id, addToBasket, getQuantity, decreaseFromBasket }) {
 
     const optimizeImage = (url) => {
         return url.replace("/upload/", "/upload/w_200,h_200,c_fill/");
@@ -28,16 +16,31 @@ function Card({ foodImage, name, quantity, price, _id, user }) {
                     className="w-full h-full object-cover rounded-lg"
                 />
             </figure>
-            <div className="card-body p-4">
+            <div className="card-body p-2">
                 <h1 className="card-title">{name}</h1>
                 <p className="text-secondary-content/50 font-geist">Quantity : {quantity}</p>
-                <div className="card-actions items-center pt-4">
+                <div className="card-actions items-center pt-2 flex justify-center">
                     <p className="font-geist font-medium">₹ {price}</p>
-                    <button className="btn btn-soft btn-primary" onClick={() => {
-                        addToBasket();
-                    }}>
-                        Add
-                    </button>
+                        {getQuantity(_id) > 0 ?
+                            <div className="flex items-center justify-center gap-4 btn btn-md btn-soft btn-primary cursor-auto">
+                                <span className="text-lg cursor-pointer" onClick={() => {
+                                    addToBasket(_id);
+                                }}>
+                                    +
+                                </span>
+                                <span className="text-lg">{getQuantity(_id)}</span>
+                                <span className="text-lg cursor-pointer" onClick={() => {
+                                    decreaseFromBasket(_id);
+                                }}>
+                                    -
+                                </span>
+                            </div>
+                            : <button className="btn btn-soft btn-primary" onClick={() => {
+                                addToBasket(_id);
+                            }}>
+                                Add
+                            </button>
+                        }
                 </div>
             </div>
         </div>

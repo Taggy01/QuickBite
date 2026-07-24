@@ -1,7 +1,7 @@
 import Card from "../utils/card";
 import CardSkeleton from "../utils/cardSkeleton";
 
-function CardList({ items = [], head, loading, user }) {
+function CardList({ items = [], head, loading, addToBasket, getQuantity, decreaseFromBasket }) {
     return (
         <div className="mt-20">
             <h1 className="font-instrument mb-5 text-4xl font-medium">{head}</h1>
@@ -16,7 +16,7 @@ function CardList({ items = [], head, loading, user }) {
                         
                         : items.slice(0,6).map((item) => (
                                 <div key={item._id} className="carousel-item">
-                                    <Card {...item} key={item._id} user={user} />
+                                    <Card {...item} key={item._id} addToBasket={addToBasket} getQuantity={getQuantity} decreaseFromBasket={decreaseFromBasket} />
                                 </div>
                             )
                         )
